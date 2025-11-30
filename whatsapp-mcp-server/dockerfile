@@ -1,0 +1,19 @@
+# whatsapp-mcp-server/Dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+# ffmpeg optional (برای صوت)
+RUN apt-get update && apt-get install -y ffmpeg build-essential && rm -rf /var/lib/apt/lists/*
+
+COPY whatsapp-mcp-server/ ./whatsapp-mcp-server/
+WORKDIR /app/whatsapp-mcp-server
+
+# install requirements if exists
+# اگر requirements.txt نیست، ممکنه فقط نیاز به few packages باشه — ولی این خط رو نگه دار
+RUN pip install --upgrade pip
+RUN if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+# expose port if server listens (معمولاً MCP خودش به پورت نیاز ندارد، اما اگر HTTP دارد از PORT env استفاده کن)
+ENV PORT=8080
+CMD ["python", "main.py"]
+
