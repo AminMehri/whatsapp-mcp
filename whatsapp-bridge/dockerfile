@@ -18,7 +18,6 @@ RUN go build -o /app/bridge main.go
 
 # create store dir (mount point)
 RUN mkdir -p /data/store
-VOLUME ["/data/store"]
 
 # run
 CMD ["/app/bridge", "--store", "/data/store"]
