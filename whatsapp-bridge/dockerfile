@@ -1,5 +1,5 @@
 # whatsapp-bridge/Dockerfile
-FROM golang:1.24.0-bullseye
+FROM golang:1.24.1-bullseye
 
 # enable cgo for go-sqlite3
 ENV CGO_ENABLED=1
