@@ -1,5 +1,5 @@
 # whatsapp-bridge/Dockerfile
-FROM golang:1.24.1-bullseye
+FROM golang:1.24.1
 
 # enable cgo for go-sqlite3
 ENV CGO_ENABLED=1
@@ -12,8 +12,11 @@ WORKDIR /app/whatsapp-bridge
 # install build deps (sqlite C libs)
 RUN apt-get update && apt-get install -y ca-certificates build-essential libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 
+# --- UPDATE WHATSAPP CLIENT (IMPORTANT!) ---
+# always pull the latest whatsmeow to avoid "Client outdated (405)"
+RUN go get go.mau.fi/whatsmeow@latest && go mod tidy
+
 # build bridge
-RUN go mod download
 RUN go build -o /app/bridge main.go
 
 # create store dir (mount point)
@@ -21,4 +24,3 @@ RUN mkdir -p /data/store
 
 # run
 CMD ["/app/bridge", "--store", "/data/store"]
-
